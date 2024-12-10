@@ -98,6 +98,79 @@ const getAllPurchaseHistories = async (req, res) => {
   }
 };
 
+const getAllPurchaseHistories2 = async (req, res) => {
+  try {
+    const purchaseHistories = await PurchaseHistory.aggregate([
+      {
+        $lookup: {
+          from: "users", // The name of the User collection
+          localField: "user",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails", // Flatten the userDetails array
+      },
+      {
+        $lookup: {
+          from: "products", // The name of the Product collection
+          localField: "products.products",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          purchaseId: 1,
+          purchaseDate: 1,
+          totalAmount: 1,
+          paymentMethod: 1,
+          paymentStatus: 1,
+          orderNotes: 1,
+          discount: 1,
+          invoiceUrl: 1,
+          "userDetails._id": 1,
+          "userDetails.name": 1,
+          "userDetails.email": 1,
+          products: 1,
+          productDetails: {
+            $map: {
+              input: "$products",
+              as: "item",
+              in: {
+                productId: "$$item.products",
+                quantity: "$$item.quantity",
+                price: "$$item.price",
+                totalPrice: "$$item.totalPrice",
+                imageUrl: "$$item.imageUrl",
+                details: {
+                  $arrayElemAt: [
+                    {
+                      $filter: {
+                        input: "$productDetails",
+                        as: "product",
+                        cond: { $eq: ["$$product._id", "$$item.products"] },
+                      },
+                    },
+                    0,
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    res.status(200).json(purchaseHistories);
+  } catch (error) {
+    console.error("Error fetching purchase histories:", error);
+    res.status(500).json({ message: error.message || "Internal server error" });
+  }
+};
+
 // Delete a purchase history by ID
 const deletePurchaseHistory = async (req, res) => {
   try {
@@ -120,4 +193,5 @@ export {
   getPurchaseHistoryByUser,
   getAllPurchaseHistories,
   deletePurchaseHistory,
+  getAllPurchaseHistories2,
 };
