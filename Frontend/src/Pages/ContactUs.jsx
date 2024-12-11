@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import emailjs from "emailjs-com";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 import {
 	FaFacebookF,
 	FaTwitter,
@@ -70,7 +71,12 @@ const ContactUs = () => {
 				{/* Contact Form */}
 
 				<div className="flex flex-row justify-center items-center gap-10">
-					<div className="flex flex-col my-10">
+					<motion.div
+						className="flex flex-col my-10"
+						initial={{ opacity: 0, y: 50 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 1 }}
+					>
 						<h1 className="text-[50px] max-w-[42vw] px-10 text-left">
 							We are here to assist you with every detail, ensuring your
 							questions are answered and your bespoke journey is seamless.
@@ -159,9 +165,14 @@ const ContactUs = () => {
 								</div>
 							</div>
 						</div>
-					</div>
+					</motion.div>
 
-					<div className="bg-white shadow-lg rounded-lg p-8 max-w-3xl mx-auto">
+					<motion.div
+						className="bg-white shadow-lg rounded-lg p-8 max-w-3xl mx-auto"
+						initial={{ opacity: 0, y: 50 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 1 }}
+					>
 						<h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">
 							Connect with us
 						</h1>
@@ -239,7 +250,7 @@ const ContactUs = () => {
 								</button>
 							</div>
 						</form>
-					</div>
+					</motion.div>
 				</div>
 
 				{/* Office Address & Map */}
