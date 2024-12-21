@@ -26,76 +26,76 @@ import Inventory from "./Pages/Admin/Inventory";
 import AdminPurchaseManagement from "./Pages/Admin/AdminPurchaseManagement ";
 
 function App() {
-  const user = useSelector((state) => state.Auth.user);
-  const dispatch = useDispatch();
+	const user = useSelector((state) => state.Auth.user);
+	const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (user) {
-      dispatch(updateUser());
-    }
-  }, [user?.id, dispatch]);
+	useEffect(() => {
+		if (user) {
+			dispatch(updateUser());
+		}
+	}, [user?.id, dispatch]);
 
-  // Protected Route Component
-  const ProtectedRoute = ({ children }) => {
-    return user ? children : <Navigate to="/login" />;
-  };
+	// Protected Route Component
+	const ProtectedRoute = ({ children }) => {
+		return user ? children : <Navigate to="/login" />;
+	};
 
-  return (
-    <BrowserRouter>
-      <Toaster position="top-center" containerStyle={{ top: 60 }} />
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<PublicLayout />}>
-          <Route index element={<Home />} />
-          <Route path="product-list" element={<ProductList />} />
-          <Route path="aboutus" element={<AboutUs />} />
-          <Route path="contactus" element={<ContactUs />} />
-          <Route
-            path="product-description/:id"
-            element={<ProductDescription />}
-          />
-        </Route>
+	return (
+		<BrowserRouter>
+			<Toaster position="top-center" containerStyle={{ top: 60 }} />
+			<Routes>
+				{/* Public Routes */}
+				<Route path="/" element={<PublicLayout />}>
+					<Route index element={<Home />} />
+					<Route path="product-list" element={<ProductList />} />
+					<Route path="aboutus" element={<AboutUs />} />
+					<Route path="contactus" element={<ContactUs />} />
+					<Route
+						path="product-description/:id"
+						element={<ProductDescription />}
+					/>
+				</Route>
 
-        {/* User Routes */}
-        <Route path="/" element={<UserLayout />}>
-          <Route
-            path="profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="cart"
-            element={
-              <ProtectedRoute>
-                <CartPage />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
+				{/* User Routes */}
+				<Route path="/" element={<UserLayout />}>
+					<Route
+						path="profile"
+						element={
+							<ProtectedRoute>
+								<Profile />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="cart"
+						element={
+							<ProtectedRoute>
+								<CartPage />
+							</ProtectedRoute>
+						}
+					/>
+				</Route>
 
-        {/* Admin Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
-          {/* <Route index element={<Dashboard />} /> */}
-          <Route
-            path="purchase-management"
-            element={<AdminPurchaseManagement />}
-          />
-          <Route path="inventory" element={<Inventory />} />
-          <Route path="product" element={<ProductAdding />} />
-          <Route path="user-management" element={<UserManagement />} />
-        </Route>
+				{/* Admin Routes */}
+				<Route path="/admin" element={<AdminLayout />}>
+					{/* <Route index element={<Dashboard />} /> */}
+					<Route
+						path="purchase-management"
+						element={<AdminPurchaseManagement />}
+					/>
+					<Route path="inventory" element={<Inventory />} />
+					<Route path="product" element={<ProductAdding />} />
+					<Route path="user-management" element={<UserManagement />} />
+				</Route>
 
-        {/* Auth Routes */}
-        <Route path="/" element={<AuthLayout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+				{/* Auth Routes */}
+				<Route path="/" element={<AuthLayout />}>
+					<Route path="login" element={<Login />} />
+					<Route path="register" element={<Register />} />
+				</Route>
+			</Routes>
+		</BrowserRouter>
+	);
 }
 
 export default App;
